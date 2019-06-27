@@ -1,0 +1,7 @@
+venv/
+.env
+*.pyc
+instance/
+.vscode/
+# migrations/
+start.sh
