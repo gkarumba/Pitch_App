@@ -28,51 +28,6 @@ def categories():
 
     return render_template('categories.html', pitches = pitches)
 
-@main.route('/pickUpLines/')
-def pickUpLines():
-
-    '''
-    View categories page function that returns the pickUpLines category details page and its data
-    '''
-
-    pitchPickup = Pitch.query.filter_by(pitch_category ="Pick Up Lines").all()
-
-
-    return render_template('pickUpLines.html', pitchPickup = pitchPickup )
-
-@main.route('/interview/')
-def interview():
-
-    '''
-    View categories page function that returns the interview category details page and its data
-    '''
-
-    pitchInterview = Pitch.query.filter_by(pitch_category ="Interview").all()
-
-    return render_template('interview.html', pitchInterview = pitchInterview)
-
-@main.route('/product/')
-def product():
-
-    '''
-    View categories page function that returns the product category details page and its data
-    '''
-
-    pitchProduct = Pitch.query.filter_by(pitch_category ="Product").all()
-
-    return render_template('product.html', pitchProduct = pitchProduct)
-
-@main.route('/promotion/')
-def promotion():
-
-    '''
-    View categories page function that returns the promotion category details page and its data
-    '''
-
-    pitchPromotion = Pitch.query.filter_by(pitch_category ="Promotion").all()
-
-    return render_template('promotion.html', pitchPromotion = pitchPromotion)
-
 @main.route('/business/')
 def business():
 
@@ -91,9 +46,9 @@ def tech():
     View categories page function that returns the tech category details page and its data
     '''
 
-    pitchTech = Pitch.query.filter_by(pitch_category ="Tech").all()
+    pitchSoft = Pitch.query.filter_by(pitch_category ="Software").all()
 
-    return render_template('tech.html', pitchTech = pitchTech)
+    return render_template('software.html', pitchSoft = pitchSoft)
 
 @main.route('/pitch/new', methods = ['GET','POST'])
 @login_required
@@ -102,17 +57,18 @@ def new_pitch():
     new_pitch = None
 
     if form.validate_on_submit():
-        pitch_category = form.category.data
+        category = form.category.data
+        title = form.title.data
         pitch = form.pitch.data
         
-        new_pitch = Pitch(pitch_category = pitch_category, pitch = pitch, user = current_user)
+        new_pitch = Pitch(category = category, pitch = pitch, title = title, user = current_user)
 
         new_pitch.save_pitch()
 
         return redirect(url_for('.index'))
 
-    title = 'New pitch'
-    return render_template('new_pitch.html',title = title, pitch_form = form, new_pitch=new_pitch)
+    title = 'Post Your Pitch'
+    return render_template('pitch.html',title = title, pitch_form = form, new_pitch=new_pitch)
 
 
 
