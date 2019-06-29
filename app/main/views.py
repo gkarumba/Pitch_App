@@ -134,11 +134,9 @@ def comment(id):
         comments = commentForm.comment.data
         new_comment = Comment(comments = comments, pitch_id = id, user = current_user)
 
-        #save
         new_comment.save_comment()
         return redirect(url_for('.comment',id=id))
 
-    
     all_comments = Comment.query.filter_by(pitch_id=id).all()
 
-    return render_template("new_comment.html",pitch = pitch, id=id,comment_form = comment_form, all_comments = all_comments)
+    return render_template("new_comment.html",pitch = pitch, id=id,comment_form = commentForm, all_comments = all_comments)
