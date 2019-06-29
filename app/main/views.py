@@ -125,13 +125,13 @@ def single_pitch(id):
 def comment(id):
     
     pitch = Pitch.query.get(id)
-    comment_form = CommentsForm()
+    commentForm = CommentsForm()
 
     if id is None:
         abort(404)
 
     if comment_form.validate_on_submit():
-        comments = comment_form.comments.data
+        comments = commentForm.comment.data
         new_comment = Comment(comments = comments, pitch_id = id, user = current_user)
 
         #save
