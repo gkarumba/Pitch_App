@@ -7,3 +7,38 @@
     <link rel="stylesheet" href="{{url_for('static',filename='css/index.css')}}">
 {% endblock %}
 <!-- Content block -->
+
+{% block content %}
+<div class = "container" style="background:rgb(211, 208, 208)">
+  <div class="well">
+  
+    <img src="https://s23078.pcdn.co/wp-content/uploads/pitching-articles-freelance-writing.png" alt="">
+  
+  </div>
+
+    <div style="margin-top: 30px; margin-bottom: 30px;">       
+        <!-- Business Pitches -->
+        <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="thumbnail">
+                <div class="caption">
+                <h4>Business Pitches</h4>
+                <p class = "cardbody" style="font-size: 14px">Looking for Investors for your new business idea? How would you sell them the idea?.</p>
+                <a href="{{url_for('main.business')}}" class="btn btn-warning center-block" role="button">View Pitches</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Software Pitches -->
+        <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="thumbnail">
+                <div class="caption">
+                <h4>Tech-Projects Pitches</h4>
+                <p class = "cardbody" style="font-size: 14px">Have a life changing tech-project idea? Why should Investors or other developers want to be part of it?.</p>
+                <a href="{{url_for('main.software')}}" class="btn btn-warning center-block" role="button">View Pitches</a>
+                </div>
+            </div>
+        </div>        
+    </div>
+
+</div>
+{% endblock%}
