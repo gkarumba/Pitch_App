@@ -39,11 +39,11 @@ def business():
 
     return render_template('business.html', pitchBusiness = pitchBusiness)
 
-@main.route('/tech/')
-def tech():
+@main.route('/software/')
+def software():
 
     '''
-    View categories page function that returns the tech category details page and its data
+    View categories page function that returns the software category details page and its data
     '''
 
     pitchSoft = Pitch.query.filter_by(pitch_category ="Software").all()
