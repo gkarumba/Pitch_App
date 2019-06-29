@@ -14,32 +14,44 @@ class User(UserMixin,db.Model):
     id = db.Column(db.Integer,primary_key = True)
     username = db.Column(db.String(255),index = True)
     email = db.Column(db.String(255),unique = True,index = True)
-    pitch = db.Column(db.String(255))
     profile_pic_path = db.Column(db.String())
     password_hash = db.Column(db.String(255))
+    pitch = db.relationship('Pitch',backref = 'user',lazy = "dynamic")
     comments = db.relationship('Comment',backref = 'user',lazy = "dynamic")
+    
+    def save_comment(self):
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def get_comments(cls,id):
+        comments = Comment.query.filter_by(pitch_id=id).all()
+        
+        return comments
+   
     @property
     def password(self):
         raise AttributeError('You cannot read the password attribute')
+    
     @password.setter
     def password(self, password):
         self.password_hash = generate_password_hash(password)
+    
     def verify_password(self,password):
         print(self.password_hash)
         print(password)
         return check_password_hash(self.password_hash,password)
+    
     def __repr__(self):
         return f'User {self.username}'
     
-class Review(db.Model):
+class Pitch(db.Model):
     
-    __tablename__ = 'reviews'
+    __tablename__ = 'pitches'
 
     id = db.Column(db.Integer,primary_key = True)
-    movie_id = db.Column(db.Integer)
-    movie_title = db.Column(db.String)
-    image_path = db.Column(db.String)
-    movie_review = db.Column(db.String)
+    category = db.Column(db.String)
+    pitch = db.Column(db.String)
     posted = db.Column(db.DateTime,default=datetime.utcnow)
     user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
     
@@ -48,6 +60,22 @@ class Review(db.Model):
         db.session.commit()
 
     @classmethod
-    def get_comments(cls,id):
-        comments = Review.query.filter_by(movie_id=id).all()
-        return reviews
+    def get_pitches(cls,pitch_category):
+        pitches = Pitch.query.filter_by(pitch_category = pitch_category).all()
+        return pitches
+
+    @classmethod
+    def get_pitch(cls,id):
+        pitch = Pitch.query.filter_by(id=id).first()
+
+        return pitch 
+    
+class Comment(db.Model):
+    
+    __tablename__ = 'comments'
+
+    id = db.Column(db.Integer,primary_key = True)
+    comments= db.Column(db.String)
+    pitch_id = db.Column(db.Integer)
+    posted=db.Column(db.DateTime,default=datetime.utcnow)
+    user_id=db.Column(db.Integer,db.ForeignKey("users.id"))
