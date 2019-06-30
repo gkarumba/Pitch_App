@@ -2,9 +2,9 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block content %}
-    <div class="container">
+    <div class="container" >
 
-        <div class="col-md-8">
+        <div class="col-md-12" style="border:1px solid #222;border-radius: 5px;box-shadow: 5px 10px #888888;">
             {{ wtf.quick_form(pitch_form) }}
             {{simplemde.load}}
         </div>

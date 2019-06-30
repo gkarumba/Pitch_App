@@ -2,9 +2,16 @@
 
 {% block content %}
 <div class="container">
-    <div class="row">
+    <div class="row" style="border:2px solid #222;border-radius: 5px;box-shadow: 5px 10px #888888;margin-bottom: 10px;padding:10px;">
     <!-- displaying  Username-->
-        <div class="col-md-4">
+        <div class="col-md-7">
+            <!--Display profile photo-->
+            {% if user.profile_pic_path %}
+                <img src="{{url_for('static',filename=user.profile_pic_path)}}" alt="" class="img-thumbnail">
+            {%else%}
+                <p>No profile picture</p>
+            {% endif %}
+
             <h3> {{user.username| capitalize}} </h3>
 
             <!--Displaying user bio-->
@@ -15,25 +22,46 @@
             {% endif %}
         </div>
 
-        <!--Display profile photo-->
-        <div class="col-md-4">
-            {% if user.profile_pic_path %}
-                <img src="{{url_for('static',filename=user.profile_pic_path)}}" alt="" class="img-thumbnail">
-            {%else%}
-                <p>No profile picture</p>
-            {% endif %}
+        
             {% if user == current_user %}
-                <form  action="{{url_for('main.update_pic',uname=user.username)}}" method="post" enctype = "multipart/form-data">
-                    <input type="file"  name="photo" class="form-control" required>
-                    <input type="submit" class="btn btn-primary>
+                <form  action="{{url_for('main.update_pic',uname=user.username)}}" method="post" enctype = "multipart/form-data" style="margin-bottom: 10px;margin-top:10px;">
+                    <input type="file"  name="photo" class="form-control" required style="margin-bottom: 10px;margin-top:10px;">
+                    <input type="submit"class="btn btn-outline-secondary" style="margin-bottom: 10px;margin-top:10px;">
                 </form>
             {% endif %}
-        </div>
-    <div class="row">
-        <div class="col-md-4">
             {% if user == current_user %}
-                <a href="{{url_for('main.update_profile',uname=user.username)}}">Edit profile</a>
+            <a href="{{url_for('main.update_profile',uname=user.username)}}" style="margin-bottom: 10px;margin-top:10px;">Edit profile</a>
+                
             {% endif %}
+    </div>
+
+    <div class="row" style="border:2px solid #222;border-radius: 5px;box-shadow: 5px 10px #888888;margin-bottom: 10px;">
+        <div class="col-md-12">
+            <h3>Pitches By {{user.username| capitalize}}</h3>
+            {% if pitches %}
+                {% for business in pitches %}
+                <div class="col-xs-12 col-sm-6">
+                    <div class="thumbnail">
+                        <div class="caption">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3>{{business.category}}</h3>
+                                </div>
+                                <div class="card-body">
+                                    <h4>{{business.title}}</h4>
+                                    <p>{{business.pitch}}</p>
+                                    <p>Posted On:{{business.posted}} By {{business.user.username}}</p>
+                                    <a class="btn btn-outline-info btn-sm text-center" href="/pitch/new/comment/{{business.id}}"> View Comments </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor%}
+            {% else %}
+                <h3 class ="text-center" style="font-size:200%"> {{user.username| capitalize}}  has no pitches </h3>
+                <a class="btn btn-success btn-sm text-center"  href="{{url_for('main.new_pitch')}}">Write a new Pitch</a>
+            {%endif%}
         </div>
     </div>
 </div>

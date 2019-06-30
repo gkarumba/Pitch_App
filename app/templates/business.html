@@ -4,32 +4,43 @@
 {% block content %}
     
     <div class="container" class="cat-containers">
-        <div class="jumbotron">
-            <div class = "row">
-                <div class="col-md-10"> 
-                    <h1 class="jumbo-header">Business Pitches</h1>
-                </div>
-                <div class="col-md-2">
-                <a class="btn btn-danger btn-md text-center"  href="{{url_for('main.new_pitch')}}"> Add a Pitch </a>
-                </div>    
-            </div>
+        <div class = "row">
+            <div class="col-md-12"> 
+                <h1>Business Pitches</h1>
+            </div>   
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <a class="btn btn-outline-primary btn-md text-center"  href="{{url_for('main.new_pitch')}}"> Add a Pitch </a>
+            </div> 
         </div>
         <hr> 
         {% if pitchBusiness %}
             {% for business in pitchBusiness %}
-            <div class="col-xs-12 col-sm-6">
-                <div class="thumbnail">
+            <div class="col-xs-12 col-sm-6" >
+                <div class="thumbnail" style="border:1px solid #222;border-radius: 5px;box-shadow: 5px 10px #888888;">
                     <div class="caption">
-                            <div class="card-body" style="height:10em">
+                        <div class="card" >
+                            <div class="card-header">
+                                Business Pitch
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">{{business.title}}</h5>
+                                <p class="card-text">{{business.pitch}}</p>
+                                <p class="card-text">Posted On:{{business.posted}} By {{business.user.username}}</p>
+                                <a class="btn btn-outline-info btn-sm text-center" href="/pitch/new/comment/{{business.id}}"> View Comments </a>
+                            </div>
+                        </div>
+                            <!-- <div class="card-body" style="height:10em">
                                 <h3>{{business.title}}</h3>
                                 <p>{{business.pitch}}</p>
                                 <p class="card-subtitle mb-2 text-muted"> Posted On:{{business.posted}} </p>
                                 <p class="card-subtitle mb-2 text-muted">Author:{{business.user.username}} </p>
                                 <a class="btn btn-warning btn-sm text-center" href="/pitch/new/comment/{{business.id}}"> View Comments </a>
-                            </div>
-                        </div>
+                            </div> -->
                     </div>
                 </div>
+            </div>
             {% endfor%}
         {% else %}
             <h3 class ="text-center" style="font-size:200%"> This category has no pitches </h3>

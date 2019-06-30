@@ -35,7 +35,7 @@ def business():
     View categories page function that returns the business category details page and its data
     '''
 
-    pitchBusiness = Pitch.query.filter_by(pitch_category ="Business").all()
+    pitchBusiness = Pitch.query.filter_by(category ="Business").all()
 
     return render_template('business.html', pitchBusiness = pitchBusiness)
 
@@ -46,7 +46,7 @@ def software():
     View categories page function that returns the software category details page and its data
     '''
 
-    pitchSoft = Pitch.query.filter_by(pitch_category ="Software").all()
+    pitchSoft = Pitch.query.filter_by(category ="Software").all()
 
     return render_template('software.html', pitchSoft = pitchSoft)
 
@@ -74,11 +74,12 @@ def new_pitch():
 @main.route('/user/<uname>')
 def profile(uname):
     user = User.query.filter_by(username = uname).first()
+    pitches = Pitch.query.filter_by(user_id = user.id)
 
     if user is None:
         abort(404)
 
-    return render_template("profile/profile.html", user = user)
+    return render_template("profile/profile.html", user = user,pitches=pitches)
 
 @main.route('/user/<uname>/update',methods = ['GET','POST'])
 @login_required
@@ -130,7 +131,7 @@ def comment(id):
     if id is None:
         abort(404)
 
-    if comment_form.validate_on_submit():
+    if commentForm.validate_on_submit():
         comments = commentForm.comment.data
         new_comment = Comment(comments = comments, pitch_id = id, user = current_user)
 

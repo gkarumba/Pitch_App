@@ -4,8 +4,8 @@
 
 {% block content %}
 <div class="container-fluid">
-    <div class="well" style="background-color: rgba(201, 225, 245, 0.829)">
-        <div class="jumbotron" style="background-color: rgba(161, 93, 44, 0.856)">
+    <div class="well" style="border:1px solid #222;border-radius: 5px;box-shadow: 5px 10px #888888;">
+        <div class="jumbotron">
             {{ wtf.quick_form(comment_form) }}
         </div>    
             {{macro.displayComments(all_comments)}}
