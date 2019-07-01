@@ -8,7 +8,28 @@
             <h1>Posted Pitches</h1>
             <hr>
             {% if pitches %}
-                {{macro.displayPitches(pitches)}}
+                <!-- {{macro.displayPitches(pitches)}} -->
+                {% for pitch in pitches %}
+            <div class="thumbnail">
+                <div class="caption">
+                    <div class="card" style="width: 40rem;">
+                        <div class="card-body">
+                        <h4>Author</h4>
+                        <p class="card-subtitle mb-2 text-muted">{{pitch.user.username}}</p>
+                        <h2> <a href="{{url_for('main.single_pitch',id=pitch.id)}}"></a>{{pitch.pitch}}</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <p><a href="{{url_for('main.upvote',pitch_id = pitch.id)}}"><strong>Upvote:</strong> {{pitches.upvotes.count()}}</a></p
+                </div>
+
+                <div class="col-md-4">
+                <p><a href="{{url_for('main.downvote',pitch_id = pitch.id)}}"><strong>Downvote:</strong> {{pitches.downvotes}}</a></p>
+                </div>
+            </div>
+            {% endfor %}
+
             {% else %}
                 <h3 class ="text-center" style="font-size:200%"> No Pitches Posted yet </h3>
                 <a class="btn btn-success btn-lg text-center"  href="{{url_for('main.new_pitch')}}">Write a new Pitch</a>

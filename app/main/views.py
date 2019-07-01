@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect,url_for,abort
 from . import main
-from ..models import Pitch,User, Comment
+from ..models import Pitch,User, Comment, UpVote, DownVote
 from .forms import PitchForm, UpdateProfile, CommentsForm
 from flask_login import login_required, current_user
 from .. import db,photos
@@ -141,3 +141,34 @@ def comment(id):
     all_comments = Comment.query.filter_by(pitch_id=id).all()
 
     return render_template("new_comment.html",pitch = pitch, id=id,comment_form = commentForm, all_comments = all_comments)
+
+@main.route('/pitch/upvote/<int:pitch_id>/upvote', methods=['GET','POST'])
+@login_required
+def upvote(pitch_id):
+    pitch = Pitch.query.get(pitch_id)
+    user = current_user
+    pitch_upvotes = Upvote.query.filter_by(pitch_id=pitch_id)
+    pitches = Pitch.query.filter_by(category=pitch.category).order_by(Pitch.posted.desc()).all()
+
+    if Upvote.query.filter(Upvote.user_id == user.id, Upvote.pitch_id == pitch_id).first():
+        return render_template('category.html', pitches=pitches)
+
+    new_upvote = Upvote(pitch_id=pitch_id, user=current_user)
+    new_upvote.save_upvotes()
+    
+    return render_template('category.html', pitches=pitches)
+
+@main.route('/pitch/downvote/<int:pitch_id>/downvote', methods=['GET', 'POST'])
+@login_required
+def downvote(pitch_id):
+    pitch = Pitch.query.get(pitch_id)
+    user = current_user
+    pitch_downvotes = Downvote.query.filter_by(pitch_id=pitch_id)
+    pitches = Pitch.query.filter_by(category=pitch.category).order_by(Pitch.posted.desc()).all()
+
+    if Downvote.query.filter(Downvote.user_id == user.id, Downvote.pitch_id == pitch_id).first():
+        return render_template('categories.html', pitches=pitches)
+
+    new_downvote = Downvote(pitch_id=pitch_id, user=current_user)
+    new_downvote.save_downvotes()
+    return render_template('categories.html', pitches=pitches)

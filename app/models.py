@@ -19,6 +19,8 @@ class User(UserMixin,db.Model):
     password_hash = db.Column(db.String(255))
     pitch = db.relationship('Pitch',backref = 'user',lazy = "dynamic")
     comments = db.relationship('Comment',backref = 'user',lazy = "dynamic")
+    upvotes = db.relationship('UpVote',backref = 'user',lazy = "dynamic")
+    downvotes = db.relationship('DownVote',backref = 'user',lazy = "dynamic")
     
     def save_comment(self):
         db.session.add(self)
@@ -56,6 +58,8 @@ class Pitch(db.Model):
     pitch = db.Column(db.String)
     posted = db.Column(db.DateTime,default=datetime.utcnow)
     user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
+    upvotes = db.relationship('UpVote',backref = 'pitch',lazy = "dynamic")
+    downvotes = db.relationship('DownVote',backref = 'pitch',lazy = "dynamic")
     
     def save_pitch(self):
         db.session.add(self)
@@ -85,3 +89,57 @@ class Comment(db.Model):
     def save_comment(self):
         db.session.add(self)
         db.session.commit()
+        
+class UpVote(db.Model):
+    
+    __tablename__ = 'upvotes'
+
+    id = db.Column(db.Integer,primary_key = True)
+    upvote = db.Column(db.Integer)
+    pitch_id = db.Column(db.Integer, db.ForeignKey('pitches.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    
+    def save_votes(self):
+        db.session.add(self)
+        db.session.commit()
+    
+    def add_upvotes(cls, id):
+        upvote_pitch = Upvote(user=current_user, pitch_id=id)
+        upvote_pitch.save_upvotes()
+
+    @classmethod
+    def get_upvotes(cls, id):
+        upvote = Upvote.query.filter_by(pitch_id=id).all()
+        return upvote
+
+    @classmethod
+    def get_all_upvotes(cls, pitch_id):
+        upvotes = Upvote.query.order_by('id').all()
+        return upvotes
+    
+class DownVote(db.Model):
+    
+    __tablename__ = 'downvotes'
+
+    id = db.Column(db.Integer,primary_key = True)
+    downvote = db.Column(db.Integer)
+    pitch_id = db.Column(db.Integer, db.ForeignKey('pitches.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    
+    def save_votes(self):
+        db.session.add(self)
+        db.session.commit()
+    
+    def add_downvotes(cls, id):
+        downvote_pitch = Downvote(user=current_user, pitch_id=id)
+        downvote_pitch.save_downvotes()
+
+    @classmethod
+    def get_downvotes(cls, id):
+        downvote = Downvote.query.filter_by(pitch_id=id).all()
+        return downvote
+
+    @classmethod
+    def get_all_downvotes(cls, pitch_id):
+        downvotes = Downvote.query.order_by('id').all()
+        return downvotes
